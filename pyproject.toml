@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "autoforge-ml"
+name = "autoforge-mltune"
 version = "0.1.0"
 description = "AutoForge — An intelligent machine learning hyperparameter tuning platform"
 readme = "README.md"

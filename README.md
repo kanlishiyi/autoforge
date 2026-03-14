@@ -4,8 +4,8 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![CI](https://img.shields.io/github/actions/workflow/status/kanlishiyi/autoforge/ci.yml?branch=main&label=CI)](https://github.com/kanlishiyi/autoforge/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/autoforge-ml.svg)](https://pypi.org/project/autoforge-ml/)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/autoforge-ml)](https://pypi.org/project/autoforge-ml/)
+[![PyPI](https://img.shields.io/pypi/v/autoforge-mltune.svg)](https://pypi.org/project/autoforge-mltune/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/autoforge-mltune)](https://pypi.org/project/autoforge-mltune/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
@@ -497,7 +497,7 @@ Release checklist (recommended):
 - [ ] Version updated in `pyproject.toml`
 - [ ] `CHANGELOG.md` updated
 - [ ] GitHub Release created (tag + release notes)
-- [ ] Verify package on [PyPI](https://pypi.org/project/autoforge-ml/)
+- [ ] Verify package on [PyPI](https://pypi.org/project/autoforge-mltune/)
 
 ### Dashboard Dev Mode
 

@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/autoforge-ml
+      url: https://pypi.org/p/autoforge-mltune
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
