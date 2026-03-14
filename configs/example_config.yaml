@@ -1,0 +1,92 @@
+# Example configuration for AutoForge
+# This demonstrates the full configuration schema
+
+experiment:
+  name: "classification_experiment"
+  task: "classification"  # classification, regression, generation
+  objective: "val_accuracy"  # Metric to optimize
+  direction: "maximize"  # minimize or maximize
+  tags:
+    - "vision"
+    - "resnet"
+  description: "Image classification experiment on CIFAR-10"
+
+model:
+  architecture: "resnet"
+  num_layers: 18
+  hidden_dim: 512
+  num_heads: 8
+  dropout: 0.1
+  activation: "relu"
+  # Architecture-specific parameters
+  extra:
+    pretrained: true
+    num_classes: 10
+
+training:
+  epochs: 100
+  batch_size: 32
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  optimizer: "adamw"
+  scheduler: "cosine"
+  warmup_steps: 500
+  gradient_clip: 1.0
+  accumulation_steps: 1
+  # Early stopping
+  early_stopping: true
+  patience: 10
+  min_delta: 0.001
+
+tuning:
+  strategy: "bayesian"  # bayesian, tpe, grid, random, agent
+  n_trials: 50
+  timeout: null  # seconds
+  n_jobs: 1
+  pruning: true
+  seed: 42
+  # Search space definition
+  search_space:
+    learning_rate:
+      type: "loguniform"
+      low: 1.0e-5
+      high: 1.0e-1
+    batch_size:
+      type: "categorical"
+      choices: [16, 32, 64, 128]
+    num_layers:
+      type: "int"
+      low: 8
+      high: 32
+    dropout:
+      type: "float"
+      low: 0.0
+      high: 0.5
+    optimizer:
+      type: "categorical"
+      choices: ["adam", "adamw", "sgd"]
+
+data:
+  train_path: "./data/train"
+  val_path: "./data/val"
+  test_path: "./data/test"
+  train_split: 0.8
+  num_workers: 4
+  pin_memory: true
+
+logging:
+  log_dir: "./logs"
+  checkpoint_dir: "./checkpoints"
+  save_best_only: true
+  log_interval: 100  # steps
+  save_interval: 1  # epochs
+  use_tensorboard: true
+  use_wandb: false
+  wandb_project: null
+
+distributed:
+  enabled: false
+  backend: "nccl"
+  strategy: "ddp"  # ddp, deepspeed, fsdp
+  num_gpus: 1
+  num_nodes: 1
