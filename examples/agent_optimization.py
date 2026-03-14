@@ -27,8 +27,8 @@ Or pass directly to the constructor:
     AgentOptimizer(config, model="gpt-4o-mini", api_key="sk-...", base_url="...")
 """
 
-from mltune.optim.agent import AgentOptimizer, AutoResearchRunner
 from mltune import Config
+from mltune.optim.agent import AgentOptimizer, AutoResearchRunner
 
 
 # ============================================================

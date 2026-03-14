@@ -10,16 +10,16 @@ import torch
 def get_device(device: Optional[str] = None) -> torch.device:
     """
     Get the appropriate device.
-    
+
     Args:
         device: Device string ("cuda", "cpu", "mps", or None for auto)
-        
+
     Returns:
         torch.device object
     """
     if device is not None:
         return torch.device(device)
-    
+
     if torch.cuda.is_available():
         return torch.device("cuda")
     elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
@@ -31,12 +31,12 @@ def get_device(device: Optional[str] = None) -> torch.device:
 def get_device_info() -> Tuple[str, int, str]:
     """
     Get device information.
-    
+
     Returns:
         Tuple of (device_name, memory_gb, device_type)
     """
     device = get_device()
-    
+
     if device.type == "cuda":
         name = torch.cuda.get_device_name(0)
         memory = torch.cuda.get_device_properties(0).total_memory / 1e9
@@ -51,7 +51,7 @@ def get_device_info() -> Tuple[str, int, str]:
 def set_device(device: str) -> None:
     """
     Set the default device.
-    
+
     Args:
         device: Device string
     """
@@ -61,7 +61,7 @@ def set_device(device: str) -> None:
 def get_num_devices() -> int:
     """
     Get the number of available devices.
-    
+
     Returns:
         Number of GPUs or 1 for CPU
     """
@@ -80,7 +80,7 @@ def clear_cuda_memory() -> None:
 def get_memory_usage() -> Tuple[float, float]:
     """
     Get current memory usage.
-    
+
     Returns:
         Tuple of (used_gb, total_gb)
     """

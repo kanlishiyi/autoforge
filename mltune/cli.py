@@ -68,7 +68,7 @@ def optimize(
     # Create tuner
     tuner = Tuner(config, verbose=verbose)
 
-    console.print(f"[bold green]Starting optimization[/]")
+    console.print("[bold green]Starting optimization[/]")
     console.print(f"  Strategy: {strategy}")
     console.print(f"  Trials: {n_trials}")
     console.print(f"  Direction: {config.experiment.direction}")
@@ -140,7 +140,7 @@ def train(config_path: str, epochs: Optional[int], output: Optional[str]):
             exp.log_metric("train_loss", loss, step=epoch)
             console.print(f"Epoch {epoch + 1}/{config.training.epochs}: loss={loss:.4f}")
 
-    console.print(f"\n[bold green]Training Complete[/]")
+    console.print("\n[bold green]Training Complete[/]")
     console.print(f"  Final loss: {exp.get_best_metric('train_loss')}")
 
 
@@ -210,7 +210,7 @@ def show(experiment_id: str):
     if metrics:
         console.print(f"\n[bold]Metrics ({len(metrics)} records):[/]")
         # Group by metric name
-        metric_names = set(m["metric_name"] for m in metrics)
+        metric_names = {m["metric_name"] for m in metrics}
         for name in metric_names:
             values = [m["value"] for m in metrics if m["metric_name"] == name]
             console.print(f"  {name}: min={min(values):.4f}, max={max(values):.4f}, last={values[-1]:.4f}")
@@ -689,11 +689,11 @@ def agent_tune(n_trials: int, study_name: str, model: str, base_url: str, temper
     try:
         import lightgbm as lgb
         from sklearn.model_selection import train_test_split
-    except ImportError:
+    except ImportError as err:
         console.print(
             "[red]This demo requires: pip install lightgbm scikit-learn[/]"
         )
-        raise click.Abort()
+        raise click.Abort() from err
 
     # Load data (reuse the same logic as lgbm-stock)
     console.print("[dim]Loading data for agent tuning demo...[/]")
@@ -776,10 +776,10 @@ def agent_tune(n_trials: int, study_name: str, model: str, base_url: str, temper
 
     study = optimizer.optimize(objective, n_trials=n_trials)
 
-    console.print(f"\n[bold green]Agent Tuning Complete[/]")
+    console.print("\n[bold green]Agent Tuning Complete[/]")
     console.print(f"  Best RMSE: {study.best_value}")
     if study.best_params:
-        console.print(f"  Best params:")
+        console.print("  Best params:")
         for k, v in study.best_params.items():
             console.print(f"    {k}: {v}")
 

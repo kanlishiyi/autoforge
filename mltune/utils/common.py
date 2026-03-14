@@ -11,10 +11,10 @@ from typing import Any, Dict, Union
 def ensure_dir(path: Union[str, Path]) -> Path:
     """
     Ensure a directory exists.
-    
+
     Args:
         path: Directory path
-        
+
     Returns:
         Path object
     """
@@ -26,10 +26,10 @@ def ensure_dir(path: Union[str, Path]) -> Path:
 def get_timestamp(fmt: str = "%Y%m%d_%H%M%S") -> str:
     """
     Get current timestamp string.
-    
+
     Args:
         fmt: Date format string
-        
+
     Returns:
         Formatted timestamp
     """
@@ -39,10 +39,10 @@ def get_timestamp(fmt: str = "%Y%m%d_%H%M%S") -> str:
 def load_json(path: Union[str, Path]) -> Dict[str, Any]:
     """
     Load JSON file.
-    
+
     Args:
         path: File path
-        
+
     Returns:
         Parsed JSON data
     """
@@ -58,7 +58,7 @@ def save_json(
 ) -> None:
     """
     Save data to JSON file.
-    
+
     Args:
         data: Data to save
         path: Output path
@@ -66,7 +66,7 @@ def save_json(
     """
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    
+
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=indent, default=str)
 
@@ -78,12 +78,12 @@ def flatten_dict(
 ) -> Dict[str, Any]:
     """
     Flatten a nested dictionary.
-    
+
     Args:
         d: Dictionary to flatten
         parent_key: Parent key prefix
         sep: Separator for keys
-        
+
     Returns:
         Flattened dictionary
     """
@@ -103,11 +103,11 @@ def unflatten_dict(
 ) -> Dict[str, Any]:
     """
     Unflatten a dictionary with dot-separated keys.
-    
+
     Args:
         d: Flattened dictionary
         sep: Separator for keys
-        
+
     Returns:
         Nested dictionary
     """
@@ -124,10 +124,10 @@ def unflatten_dict(
 def format_duration(seconds: float) -> str:
     """
     Format duration in human-readable format.
-    
+
     Args:
         seconds: Duration in seconds
-        
+
     Returns:
         Formatted string
     """
@@ -144,10 +144,10 @@ def format_duration(seconds: float) -> str:
 def format_bytes(bytes_size: int) -> str:
     """
     Format byte size in human-readable format.
-    
+
     Args:
         bytes_size: Size in bytes
-        
+
     Returns:
         Formatted string
     """
