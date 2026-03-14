@@ -482,6 +482,23 @@ Release setup checklist:
 
 If you prefer token-based publishing, set repository secret `PYPI_API_TOKEN` and update the publish step accordingly.
 
+#### Recommended Guardrails (CI must pass before release)
+
+1. Go to `Settings -> Branches -> Add branch protection rule` for `main`.
+2. Enable `Require a pull request before merging`.
+3. Enable `Require status checks to pass before merging`.
+4. In required checks, select all CI checks from `.github/workflows/ci.yml` (all Python matrix jobs).
+5. Enable `Require branches to be up to date before merging`.
+6. Optional but recommended: enable `Require approval` and `Dismiss stale pull request approvals`.
+
+Release checklist (recommended):
+
+- [ ] PR merged into `main` with all CI checks green
+- [ ] Version updated in `pyproject.toml`
+- [ ] `CHANGELOG.md` updated
+- [ ] GitHub Release created (tag + release notes)
+- [ ] Verify package on [PyPI](https://pypi.org/project/mltune/)
+
 ### Dashboard Dev Mode
 
 ```bash

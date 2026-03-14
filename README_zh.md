@@ -481,6 +481,23 @@ mypy mltune
 
 如果你更偏好 Token 方式发布，可设置仓库 Secret `PYPI_API_TOKEN`，并在发布 workflow 中改为 token 模式。
 
+#### 推荐保护策略（CI 通过后才可发布）
+
+1. 进入 `Settings -> Branches -> Add branch protection rule`，目标分支设为 `main`。
+2. 开启 `Require a pull request before merging`（必须通过 PR 合并）。
+3. 开启 `Require status checks to pass before merging`（必须检查通过）。
+4. 在 required checks 中勾选 `.github/workflows/ci.yml` 对应的所有 CI 检查（含全部 Python 矩阵任务）。
+5. 开启 `Require branches to be up to date before merging`（分支需与主分支同步）。
+6. 可选但推荐：开启 `Require approval` 和 `Dismiss stale pull request approvals`。
+
+发布前检查清单（推荐）：
+
+- [ ] PR 已合并到 `main`，且 CI 全绿
+- [ ] `pyproject.toml` 版本号已更新
+- [ ] `CHANGELOG.md` 已更新
+- [ ] 已创建 GitHub Release（tag + 发布说明）
+- [ ] 已在 [PyPI](https://pypi.org/project/mltune/) 验证包可见且可安装
+
 ### Dashboard 开发模式
 
 ```bash
