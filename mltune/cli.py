@@ -45,34 +45,34 @@ def optimize(
 ):
     """
     Run hyperparameter optimization.
-    
+
     CONFIG_PATH: Path to configuration file (YAML or JSON)
     """
     from mltune import Config, Tuner
-    
+
     # Load configuration
     config_path = Path(config_path)
     console.print(f"[bold blue]Loading configuration from {config_path}[/]")
-    
+
     if config_path.suffix in (".yaml", ".yml"):
         config = Config.from_yaml(config_path)
     else:
         config = Config.from_json(config_path)
-    
+
     # Override settings
     config.tuning.n_trials = n_trials
     config.tuning.strategy = strategy
     if timeout:
         config.tuning.timeout = timeout
-    
+
     # Create tuner
     tuner = Tuner(config, verbose=verbose)
-    
+
     console.print(f"[bold green]Starting optimization[/]")
     console.print(f"  Strategy: {strategy}")
     console.print(f"  Trials: {n_trials}")
     console.print(f"  Direction: {config.experiment.direction}")
-    
+
     # Define placeholder objective (user should provide their own)
     def objective(trial):
         # Sample from config search space
@@ -84,19 +84,19 @@ def optimize(
                 params[name] = trial.suggest_int(name, int(param.low), int(param.high))
             elif param.type == "categorical":
                 params[name] = trial.suggest_categorical(name, param.choices)
-        
+
         # Placeholder: user should implement actual training
         console.print(f"[dim]Trial params: {params}[/]")
         return 0.0
-    
+
     # Run optimization
     study = tuner.optimize(objective, n_trials=n_trials)
-    
+
     # Display results
     console.print("\n[bold green]Optimization Complete[/]")
     console.print(f"  Best value: {study.best_value}")
     console.print(f"  Best params: {study.best_params}")
-    
+
     # Save results
     if output:
         output_path = Path(output)
@@ -111,27 +111,27 @@ def optimize(
 def train(config_path: str, epochs: Optional[int], output: Optional[str]):
     """
     Run a single training experiment.
-    
+
     CONFIG_PATH: Path to configuration file
     """
     from mltune import Config, Experiment
-    
+
     # Load configuration
     config_path = Path(config_path)
     config = Config.from_yaml(config_path) if config_path.suffix in (".yaml", ".yml") else Config.from_json(config_path)
-    
+
     if epochs:
         config.training.epochs = epochs
-    
+
     console.print(f"[bold blue]Starting training: {config.experiment.name}[/]")
-    
+
     # Create experiment
     exp = Experiment(
         name=config.experiment.name,
         config=config,
         storage_dir=output or "experiments",
     )
-    
+
     with exp.track():
         # Placeholder training loop
         for epoch in range(config.training.epochs):
@@ -139,7 +139,7 @@ def train(config_path: str, epochs: Optional[int], output: Optional[str]):
             loss = 1.0 / (epoch + 1)
             exp.log_metric("train_loss", loss, step=epoch)
             console.print(f"Epoch {epoch + 1}/{config.training.epochs}: loss={loss:.4f}")
-    
+
     console.print(f"\n[bold green]Training Complete[/]")
     console.print(f"  Final loss: {exp.get_best_metric('train_loss')}")
 
@@ -150,24 +150,24 @@ def train(config_path: str, epochs: Optional[int], output: Optional[str]):
 def experiments(limit: int, status: Optional[str]):
     """List all experiments."""
     from mltune.tracker.backend import SQLiteBackend
-    
+
     backend = SQLiteBackend()
     experiments = backend.list_experiments(limit)
-    
+
     if status:
         experiments = [e for e in experiments if e.get("status") == status]
-    
+
     if not experiments:
         console.print("[yellow]No experiments found[/]")
         return
-    
+
     table = Table(title="Experiments")
     table.add_column("ID", style="cyan")
     table.add_column("Name", style="green")
     table.add_column("Status", style="yellow")
     table.add_column("Best Value", style="magenta")
     table.add_column("Created")
-    
+
     for exp in experiments:
         table.add_row(
             exp.get("experiment_id", "N/A"),
@@ -176,7 +176,7 @@ def experiments(limit: int, status: Optional[str]):
             str(exp.get("best_metric", "N/A")),
             exp.get("created_at", "N/A"),
         )
-    
+
     console.print(table)
 
 
@@ -185,26 +185,26 @@ def experiments(limit: int, status: Optional[str]):
 def show(experiment_id: str):
     """Show experiment details."""
     from mltune.tracker.backend import SQLiteBackend
-    
+
     backend = SQLiteBackend()
     experiment = backend.load_experiment(experiment_id)
-    
+
     if not experiment:
         console.print(f"[red]Experiment not found: {experiment_id}[/]")
         return
-    
+
     console.print(f"\n[bold blue]Experiment: {experiment_id}[/]")
     console.print(f"  Name: {experiment.get('name')}")
     console.print(f"  Status: {experiment.get('status')}")
     console.print(f"  Created: {experiment.get('created_at')}")
-    
+
     if experiment.get("best_metric"):
         console.print(f"  Best Metric: {experiment.get('best_metric')}")
-    
+
     if experiment.get("config"):
         console.print("\n[bold]Configuration:[/]")
         console.print(json.dumps(experiment.get("config"), indent=2))
-    
+
     # Show metrics
     metrics = backend.load_metrics(experiment_id)
     if metrics:
@@ -222,10 +222,10 @@ def show(experiment_id: str):
 def delete(experiment_id: str):
     """Delete an experiment."""
     from mltune.tracker.backend import SQLiteBackend
-    
+
     backend = SQLiteBackend()
     success = backend.delete_experiment(experiment_id)
-    
+
     if success:
         console.print(f"[green]Deleted experiment: {experiment_id}[/]")
     else:
@@ -238,7 +238,7 @@ def delete(experiment_id: str):
 def server(host: str, port: int):
     """Start the API server."""
     from mltune.api.routes import run_server
-    
+
     console.print(f"[bold green]Starting API server on {host}:{port}[/]")
     run_server(host=host, port=port)
 
@@ -249,7 +249,7 @@ def server(host: str, port: int):
 def dashboard(host: str, port: int):
     """Start the web dashboard (API server + static dashboard)."""
     from mltune.api.routes import run_server
-    
+
     console.print(f"[bold blue]Starting dashboard on http://{host}:{port}/dashboard[/]")
     console.print(
         "[dim]Make sure you have built the frontend in 'dashboard/' "
@@ -278,18 +278,18 @@ def lgbm_stock_example(n_trials: int, study_name: str):
         (e.g. reading from CSV / database / parquet) for real use cases.
     """
     try:
+        import lightgbm as lgb  # type: ignore[import]
         import numpy as np  # type: ignore[import]
         import pandas as pd  # type: ignore[import]
         import yfinance as yf  # type: ignore[import]
-        import lightgbm as lgb  # type: ignore[import]
         from sklearn.model_selection import train_test_split  # type: ignore[import]
-    except ImportError:
+    except ImportError as err:
         console.print(
             "[red]Missing dependencies.[/]\n"
             "Please install the extra packages first:\n"
             "  pip install lightgbm scikit-learn pandas yfinance"
         )
-        raise click.Abort()
+        raise click.Abort() from err
 
     from mltune import Config, Tuner
     from mltune.optim.base import Trial
@@ -520,7 +520,7 @@ def lgbm_stock_example(n_trials: int, study_name: str):
 
     console.print("\n[bold green]Optimization finished[/]")
     console.print(f"  Best RMSE: {study.best_value}")
-    console.print(f"  Best params:")
+    console.print("  Best params:")
     for k, v in (study.best_params or {}).items():
         console.print(f"    {k}: {v}")
 
@@ -559,7 +559,7 @@ def lgbm_stock_example(n_trials: int, study_name: str):
         with open(pkl_path, "wb") as f:
             pickle.dump(final_model, f)
 
-        console.print(f"  [green]Best model saved to:[/]")
+        console.print("  [green]Best model saved to:[/]")
         console.print(f"    LightGBM native: {model_path}")
         console.print(f"    Pickle:          {pkl_path}")
         console.print(f"    Best iteration:  {final_model.best_iteration}")
@@ -610,26 +610,26 @@ def report(study_path: str):
     """Generate a report from a study file."""
     from mltune.optim.study import Study
     from mltune.tracker.visualizer import Visualizer
-    
+
     study = Study.load(study_path)
-    
+
     console.print(f"\n[bold blue]Study Report: {study.study_name}[/]")
     console.print("=" * 50)
-    
+
     summary = study.summary()
     console.print(f"  Direction: {summary.direction}")
     console.print(f"  Total trials: {summary.n_trials}")
     console.print(f"  Completed: {summary.n_completed_trials}")
     console.print(f"  Failed: {summary.n_failed_trials}")
-    
+
     if study.best_value is not None:
         console.print(f"\n[bold green]Best Value: {study.best_value}[/]")
-    
+
     if study.best_params:
         console.print("\n[bold]Best Parameters:[/]")
         for key, value in study.best_params.items():
             console.print(f"  {key}: {value}")
-    
+
     # Parameter importance
     importance = study.param_importance()
     if importance:
@@ -638,10 +638,10 @@ def report(study_path: str):
         for param, score in sorted_importance:
             bar = "█" * int(score * 20)
             console.print(f"  {param}: {score:.3f} {bar}")
-    
+
     # Generate visualizations
     viz = Visualizer()
-    
+
     # Save optimization history plot
     history = study.get_optimization_history()
     if history:

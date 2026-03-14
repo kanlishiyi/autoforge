@@ -18,7 +18,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from mltune.core.config import Config
 from mltune.optim.study import Study
 from mltune.tracker.backend import SQLiteBackend
 
@@ -118,9 +117,9 @@ async def create_experiment(request: ExperimentCreate):
     """Create a new experiment."""
     import uuid
     from time import time
-    
+
     experiment_id = f"exp_{uuid.uuid4().hex[:8]}"
-    
+
     data = {
         "name": request.name,
         "status": "created",
@@ -128,9 +127,9 @@ async def create_experiment(request: ExperimentCreate):
         "tags": request.tags,
         "created_at": time(),
     }
-    
+
     _db.save_experiment(experiment_id, data)
-    
+
     return ExperimentResponse(
         experiment_id=experiment_id,
         name=request.name,
@@ -146,10 +145,10 @@ async def list_experiments(
 ):
     """List all experiments."""
     experiments = _db.list_experiments(limit)
-    
+
     if status:
         experiments = [e for e in experiments if e.get("status") == status]
-    
+
     results = []
     for e in experiments:
         name = e.get("name", "")
@@ -176,10 +175,10 @@ async def list_experiments(
 async def get_experiment(experiment_id: str):
     """Get experiment by ID."""
     experiment = _db.load_experiment(experiment_id)
-    
+
     if not experiment:
         raise HTTPException(status_code=404, detail="Experiment not found")
-    
+
     name = experiment.get("name", "")
     model_path: Optional[str] = None
     study = _load_study_from_disk(name)
@@ -201,10 +200,10 @@ async def get_experiment(experiment_id: str):
 async def delete_experiment(experiment_id: str):
     """Delete an experiment."""
     success = _db.delete_experiment(experiment_id)
-    
+
     if not success:
         raise HTTPException(status_code=404, detail="Experiment not found")
-    
+
     return {"status": "deleted", "experiment_id": experiment_id}
 
 
@@ -213,17 +212,17 @@ async def delete_experiment(experiment_id: str):
 async def log_metric(request: MetricLog):
     """Log a metric value."""
     experiment = _db.load_experiment(request.experiment_id)
-    
+
     if not experiment:
         raise HTTPException(status_code=404, detail="Experiment not found")
-    
+
     _db.save_metric(
         experiment_id=request.experiment_id,
         metric_name=request.name,
         value=request.value,
         step=request.step,
     )
-    
+
     return {"status": "logged"}
 
 
@@ -234,10 +233,10 @@ async def get_metrics(
 ):
     """Get metrics for an experiment."""
     experiment = _db.load_experiment(experiment_id)
-    
+
     if not experiment:
         raise HTTPException(status_code=404, detail="Experiment not found")
-    
+
     metrics = _db.load_metrics(experiment_id, name)
     return {"experiment_id": experiment_id, "metrics": metrics}
 
@@ -247,17 +246,17 @@ async def get_metrics(
 async def start_optimization(request: OptimizeRequest, background_tasks: BackgroundTasks):
     """Start an optimization run."""
     experiment = _db.load_experiment(request.experiment_id)
-    
+
     if not experiment:
         raise HTTPException(status_code=404, detail="Experiment not found")
-    
+
     # Update status
     experiment["status"] = "running"
     _db.save_experiment(request.experiment_id, experiment)
-    
+
     # TODO: Add background optimization task
     # background_tasks.add_task(run_optimization, request)
-    
+
     return {
         "status": "started",
         "experiment_id": request.experiment_id,
@@ -287,7 +286,7 @@ async def get_study(study_name: str):
 
     if not study:
         raise HTTPException(status_code=404, detail="Study not found")
-    
+
     return {
         "study_name": study_name,
         "best_value": study.best_value,
@@ -306,9 +305,9 @@ async def get_param_importance(study_name: str):
 
     if not study:
         raise HTTPException(status_code=404, detail="Study not found")
-    
+
     importance = study.param_importance()
-    
+
     return {
         "study_name": study_name,
         "importance": importance,

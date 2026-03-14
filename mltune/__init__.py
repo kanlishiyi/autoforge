@@ -11,12 +11,12 @@ __license__ = "MIT"
 
 from mltune.core.config import Config
 from mltune.core.experiment import Experiment
-from mltune.optim.tuner import Tuner
 from mltune.optim.study import Study
+from mltune.optim.tuner import Tuner
 
 __all__ = [
     "Config",
-    "Experiment", 
+    "Experiment",
     "Tuner",
     "Study",
     "__version__",
