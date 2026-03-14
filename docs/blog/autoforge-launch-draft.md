@@ -1,89 +1,144 @@
-# AutoForge: From Hyperparameter Tuning to LLM-Driven Autonomous Research
+# AutoForge：从超参数调优走向 LLM 驱动的自主研究
 
-> Draft post for product launch and technical sharing.
+> 可直接发布到公众号 / 掘金的技术文章版本（首发草稿）。
 
-## TL;DR
+## 一句话介绍
 
-AutoForge is an open-source platform for machine learning optimization that combines:
+AutoForge 是一个面向机器学习实验的开源平台：  
+它不仅能做经典超参数优化（Bayesian / Random / Grid），还支持 LLM Agent 参与调参，甚至实现类似 autoresearch 的“自动改代码-自动验证-自动择优”闭环。
 
-- classic HPO methods (Bayesian TPE / random / grid),
-- LLM agent-based parameter exploration,
-- and autoresearch-style autonomous code iteration.
+---
 
-It also ships with an end-to-end dashboard for real-time study monitoring and best-model tracking.
+## 你可能正在经历这些问题
 
-## Why AutoForge
+很多团队的实验流程仍然是“半自动”：
 
-Most ML teams still treat tuning and experimentation as disconnected workflows:
+1. 手动改训练脚本；
+2. 手动记录结果；
+3. 手动比较实验；
+4. 手动决定下一轮参数。
 
-1. scripts are edited manually,
-2. experiments are tracked in ad hoc files,
-3. and optimization logic is hard-coded in each project.
+这会导致两个后果：
 
-AutoForge unifies these into one system with a single CLI and Python API, so teams can move from "run trials" to "continuous research loops."
+- 迭代慢：每轮实验都要重复劳动；
+- 难复现：参数、代码、结果常常不在同一个上下文里。
 
-## Core Architecture
+AutoForge 的目标，就是把这些环节串成一个可追踪、可复现、可扩展的研究流水线。
 
-### 1) Study-Centric Optimization Layer
+---
 
-- Unified `Study` abstraction for trials, metrics, and metadata.
-- Multiple optimizers share the same data model.
-- Incremental persistence after each trial enables live dashboard updates.
+## AutoForge 的三层能力
 
-### 2) Agent Optimization (Level 1)
+### 1）统一 Study 抽象（基础层）
 
-- LLM proposes candidate hyperparameters based on trial history.
-- Existing objective function remains unchanged.
-- Great for narrowing search under constrained budgets.
+- 用 `Study` 统一承载 Trial、指标、参数、元数据；
+- 多种优化器共享同一套数据结构；
+- 每轮 trial 增量保存，Dashboard 可以实时显示进度。
 
-### 3) AutoResearch (Level 2)
+这层能力解决的是“实验管理”问题。
 
-- LLM can revise training script variants directly.
-- Each candidate script is executed, measured, and accepted/rejected by objective.
-- Best code is saved with timestamps for reproducibility.
+### 2）Agent 调参（增强层）
 
-## Real-Time Experiment Visibility
+- LLM 根据历史 trial 结果，提出下一轮候选超参数；
+- 不改变你的目标函数写法；
+- 在预算有限时，比纯随机搜索更高效。
 
-The Web Dashboard provides:
+这层能力解决的是“怎么更快找到更好参数”。
 
-- optimization history,
-- best-parameter and importance views,
-- trial-level details (state / duration / value / params),
-- and best model path for quick artifact retrieval.
+### 3）AutoResearch 自主研究（进阶层）
 
-This shortens iteration loops for both engineers and researchers.
+- LLM 不仅调参，还能改训练脚本；
+- 每个脚本版本自动执行并根据目标指标打分；
+- 自动接受/拒绝改动，保留当前最优代码；
+- 最佳脚本带时间戳保存，便于回溯与复现。
 
-## Practical Workflow
+这层能力解决的是“怎么让系统自己探索代码改进路径”。
+
+---
+
+## 为什么这套模式有效
+
+核心不是“用了大模型”，而是形成了可执行闭环：
+
+1. **提出假设**（LLM 生成参数或代码变体）
+2. **执行验证**（真实训练脚本跑起来）
+3. **量化评估**（目标指标统一比较）
+4. **保留最优**（持续迭代到更优结果）
+
+换句话说，AutoForge 把“灵感驱动”变成了“数据驱动的持续研究”。
+
+---
+
+## 实时可观测：不是跑完才知道结果
+
+AutoForge Dashboard 提供了完整可视化：
+
+- 优化历史曲线（Optimization History）
+- 最优参数与参数重要性
+- Trial 级别明细（状态、耗时、指标、参数）
+- 最佳模型/脚本路径
+
+这意味着你可以在实验进行中就判断“是否继续”“是否调整策略”，而不是被动等待任务结束。
+
+---
+
+## 快速上手（可直接复制）
 
 ```bash
-# 1) install
+# 1) 安装
 pip install -e ".[dev]"
 
-# 2) run example tuning
+# 2) 运行调优示例
 mltune lgbm-stock --n-trials 30 --study-name lgbm_stock_price
 
-# 3) launch dashboard
+# 3) 启动可视化面板
 mltune dashboard --port 8000
 ```
 
-For autonomous research:
+如果你要体验自主研究模式：
 
 ```bash
 mltune autoresearch -t train.py -p program.md -m val_loss -d minimize -n 20
 ```
 
-## Differentiators
+---
 
-- **Pragmatic first**: real code execution + measurable objective improvements.
-- **Compatible by design**: keep package/CLI stability (`mltune`) while evolving branding (`AutoForge`).
-- **Ops-friendly**: CI and PyPI release workflows included.
+## 和常见调参工具有什么不同？
 
-## Roadmap
+AutoForge 的差异点在于：
 
-- Multi-agent collaboration (planner / coder / critic).
-- Better artifact lineage (dataset + model + prompt version links).
-- Optional cloud execution backends for parallel research loops.
+- **从“参数搜索”扩展到“代码搜索”**；
+- **实验、模型、脚本、可视化打通**；
+- **工程化完整**：提供 CI、发布流程、文档和示例。
 
-## Closing
+它既适合个人研究者，也适合需要规范化实验流程的小团队。
 
-AutoForge is built for teams that want more than static HPO scripts. If you are exploring LLM-native ML tooling, this is a practical starting point to move from experiments to autonomous research cycles.
+---
+
+## 适用场景
+
+- 你有固定训练任务，但调参成本很高；
+- 你希望引入 LLM Agent，但不想牺牲可控性；
+- 你需要把“实验结果”变成“可复现资产”。
+
+---
+
+## 下一步规划（Roadmap）
+
+- 多 Agent 协作（Planner / Coder / Critic）
+- 更完整的实验血缘追踪（数据版本、Prompt 版本、模型版本）
+- 可选分布式执行后端，支持并行研究循环
+
+---
+
+## 结语
+
+如果说传统 HPO 解决的是“参数空间搜索”，  
+那 AutoForge 尝试解决的是“研究流程自动化”。
+
+它不是替代工程师，而是把工程师从重复实验里解放出来，专注在更高价值的研究决策上。
+
+---
+
+欢迎体验并提出建议：  
+GitHub: https://github.com/kanlishiyi/autoforge
