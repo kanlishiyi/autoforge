@@ -25,7 +25,7 @@ Thank you for your interest in contributing to AutoForge! This document provides
 ```bash
 # Fork the repository on GitHub
 # Then clone your fork
-git clone https://github.com/YOUR_USERNAME/autoforge.git
+git clone https://github.com/kanlishiyi/autoforge.git
 cd autoforge
 ```
 

@@ -75,11 +75,11 @@ all = [
 mltune = "mltune.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/anthropic/autoforge"
-Documentation = "https://autoforge.readthedocs.io"
-Repository = "https://github.com/anthropic/autoforge.git"
-Issues = "https://github.com/anthropic/autoforge/issues"
-Changelog = "https://github.com/anthropic/autoforge/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/kanlishiyi/autoforge"
+Documentation = "https://github.com/kanlishiyi/autoforge/wiki"
+Repository = "https://github.com/kanlishiyi/autoforge.git"
+Issues = "https://github.com/kanlishiyi/autoforge/issues"
+Changelog = "https://github.com/kanlishiyi/autoforge/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["mltune"]

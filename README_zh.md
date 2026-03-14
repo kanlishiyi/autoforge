@@ -31,7 +31,7 @@ AutoForge 是一个智能超参数调优平台，灵感来自 [Karpathy 的 auto
 ### 从源码安装
 
 ```bash
-git clone https://github.com/anthropic/autoforge.git
+git clone https://github.com/kanlishiyi/autoforge.git
 cd autoforge
 pip install -e ".[dev]"
 ```
@@ -55,7 +55,7 @@ cd dashboard && npm install && npm run build && cd ..
 
 ```bash
 # 1. 安装
-git clone https://github.com/anthropic/autoforge.git && cd autoforge
+git clone https://github.com/kanlishiyi/autoforge.git && cd autoforge
 pip install -e .
 pip install lightgbm scikit-learn pandas yfinance
 
@@ -436,7 +436,7 @@ print(f"Best model: {study.best_model_path}")
 
 ```bash
 # 克隆并安装
-git clone https://github.com/anthropic/autoforge.git
+git clone https://github.com/kanlishiyi/autoforge.git
 cd autoforge
 pip install -e ".[dev]"
 

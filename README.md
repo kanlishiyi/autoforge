@@ -31,7 +31,7 @@ AutoForge is an intelligent hyperparameter tuning platform inspired by [Karpathy
 ### From Source
 
 ```bash
-git clone https://github.com/anthropic/autoforge.git
+git clone https://github.com/kanlishiyi/autoforge.git
 cd autoforge
 pip install -e ".[dev]"
 ```
@@ -55,7 +55,7 @@ cd dashboard && npm install && npm run build && cd ..
 
 ```bash
 # 1. Install
-git clone https://github.com/anthropic/autoforge.git && cd autoforge
+git clone https://github.com/kanlishiyi/autoforge.git && cd autoforge
 pip install -e .
 pip install lightgbm scikit-learn pandas yfinance
 
@@ -437,7 +437,7 @@ print(f"Best model: {study.best_model_path}")
 
 ```bash
 # Clone and install
-git clone https://github.com/anthropic/autoforge.git
+git clone https://github.com/kanlishiyi/autoforge.git
 cd autoforge
 pip install -e ".[dev]"
 
