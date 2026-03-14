@@ -3,6 +3,9 @@
 <div align="center">
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![CI](https://img.shields.io/github/actions/workflow/status/kanlishiyi/autoforge/ci.yml?branch=main&label=CI)](https://github.com/kanlishiyi/autoforge/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/mltune.svg)](https://pypi.org/project/mltune/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/mltune)](https://pypi.org/project/mltune/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
@@ -11,6 +14,20 @@
 [English](README.md) | [中文](README_zh.md)
 
 </div>
+
+---
+
+## 截图预览
+
+> 可将以下占位图替换为真实 Dashboard 截图（建议尺寸：1600x900）。
+
+### 实验总览
+
+![AutoForge Dashboard Overview](https://via.placeholder.com/1600x900/10131a/39ffea?text=AutoForge+Dashboard+Overview)
+
+### Study 详情（实时指标）
+
+![AutoForge Study Live Metrics](https://via.placeholder.com/1600x900/10131a/ff3ef8?text=AutoForge+Study+Live+Metrics)
 
 ---
 
@@ -450,6 +467,19 @@ isort mltune tests
 # 类型检查
 mypy mltune
 ```
+
+### CI 与发布（GitHub Actions）
+
+- CI 工作流：`.github/workflows/ci.yml`
+- PyPI 发布工作流：`.github/workflows/publish-pypi.yml`
+
+发布配置检查清单：
+
+1. 在 GitHub 上为该仓库配置 **PyPI Trusted Publisher**。
+2. 在仓库 Settings 中创建 `pypi` Environment（可选：增加人工审核规则）。
+3. 创建 GitHub Release（或手动触发 workflow）以发布到 PyPI。
+
+如果你更偏好 Token 方式发布，可设置仓库 Secret `PYPI_API_TOKEN`，并在发布 workflow 中改为 token 模式。
 
 ### Dashboard 开发模式
 

@@ -3,6 +3,9 @@
 <div align="center">
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![CI](https://img.shields.io/github/actions/workflow/status/kanlishiyi/autoforge/ci.yml?branch=main&label=CI)](https://github.com/kanlishiyi/autoforge/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/mltune.svg)](https://pypi.org/project/mltune/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/mltune)](https://pypi.org/project/mltune/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
@@ -11,6 +14,20 @@
 [English](README.md) | [中文](README_zh.md)
 
 </div>
+
+---
+
+## Screenshots
+
+> Replace these placeholders with real dashboard captures (recommended size: 1600x900).
+
+### Experiments Overview
+
+![AutoForge Dashboard Overview](https://via.placeholder.com/1600x900/10131a/39ffea?text=AutoForge+Dashboard+Overview)
+
+### Study Detail (Live Metrics)
+
+![AutoForge Study Live Metrics](https://via.placeholder.com/1600x900/10131a/ff3ef8?text=AutoForge+Study+Live+Metrics)
 
 ---
 
@@ -452,6 +469,19 @@ isort mltune tests
 mypy mltune
 ```
 
+### CI and Release (GitHub Actions)
+
+- CI workflow: `.github/workflows/ci.yml`
+- PyPI publish workflow: `.github/workflows/publish-pypi.yml`
+
+Release setup checklist:
+
+1. On GitHub, configure **PyPI Trusted Publisher** for this repository.
+2. In GitHub repository settings, create environment `pypi` (optional approval rules).
+3. Create a GitHub Release (or run workflow manually) to publish package artifacts to PyPI.
+
+If you prefer token-based publishing, set repository secret `PYPI_API_TOKEN` and update the publish step accordingly.
+
 ### Dashboard Dev Mode
 
 ```bash
@@ -482,7 +512,7 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 <div align="center">
 
-**[Examples](examples/)** •
+**[Examples](examples/)** • 
 **[Changelog](CHANGELOG.md)**
 
 </div>
